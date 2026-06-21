@@ -1,35 +1,44 @@
 # Backup Restore Readiness Checker
 
-A read-only PowerShell toolkit for basic Windows backup and restore readiness context.
+A PowerShell toolkit for Windows backup and restore readiness checks and selected guarded recovery actions.
 
-## Features
-
-- Disk space context
-- Volume summary
-- File History service context
-- System restore service context
-- Recent backup-related event summary
-- CSV, JSON, and HTML reports
-
-## How to run
+## Diagnostic script
 
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File .\Backup_Restore_Readiness_Checker.ps1
 ```
 
+## Repair script
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\Backup_Restore_Repair_Toolkit.ps1 -RestartVss -DryRun
+```
+
+Examples:
+
+```powershell
+.\Backup_Restore_Repair_Toolkit.ps1 -RestartVss
+.\Backup_Restore_Repair_Toolkit.ps1 -StartFileHistoryService
+.\Backup_Restore_Repair_Toolkit.ps1 -EnableSystemProtection C
+.\Backup_Restore_Repair_Toolkit.ps1 -CreateRestorePoint 'Before Application Repair'
+.\Backup_Restore_Repair_Toolkit.ps1 -RestoreSource D:\Backup\Folder -RestoreDestination C:\RestoreTest
+```
+
+## What the repair does
+
+- Restarts Volume Shadow Copy services.
+- Starts the File History service.
+- Enables System Protection on one selected drive.
+- Creates a named System Restore point.
+- Restores one selected file or folder into a destination that does not already exist.
+- Creates SHA-256 verification output for restored files.
+- Captures service, volume and restore-point state before and after repair.
+- Supports `-DryRun`, confirmation prompts, logs and clear exit codes.
+
 ## Safety
 
-Diagnostic-only. It reports backup and restore context for support review.
+Restore destinations must be new, preventing accidental overwrite of existing data. The tool does not delete backups, modify backup schedules or initiate a reboot automatically.
 
-## Suggested topics
+## Author
 
-```text
-powershell
-backup
-restore
-windows
-helpdesk
-it-support
-sysadmin
-readiness
-```
+Dewald Pretorius — L2 IT Support Engineer
